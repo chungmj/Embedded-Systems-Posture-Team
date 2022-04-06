@@ -7,11 +7,11 @@ mp_pose = mp.solutions.pose
 
 cap = cv2.VideoCapture(0)
 
-def make_1080p():
+def make_720p():
     cap.set(3, 1280)
     cap.set(4, 720)
 
-make_1080p()
+make_720p()
 
 # Calculate angle between elbow and body using hip, shoulder, and elbow points
 def calculate_angle(a, b, c):
