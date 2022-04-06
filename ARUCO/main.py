@@ -7,11 +7,6 @@ mp_pose = mp.solutions.pose
 
 cap = cv2.VideoCapture(0)
 
-def make_1080p():
-    cap.set(3, 1280)
-    cap.set(4, 720)
-
-make_1080p()
 
 # Calculate angle between elbow and body using hip, shoulder, and elbow points
 def calculate_angle(a, b, c):
@@ -69,14 +64,13 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             angle_r = calculate_angle(hip_r, shoulder_r, elbow_r)
 
             # Visualize angle
-            cv2.putText(image, str(round(angle_l)),
-                        tuple(np.multiply(shoulder_l, [1280, 720]).astype(int)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA
+            cv2.putText(image, str(angle_l),
+                        tuple(np.multiply(shoulder_l, [640, 480]).astype(int)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                         )
-
-            cv2.putText(image, str(round(angle_r)),
-                        tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA
+            cv2.putText(image, str(angle_r),
+                        tuple(np.multiply(shoulder_r, [640, 480]).astype(int)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA
                         )
         except:
             pass
