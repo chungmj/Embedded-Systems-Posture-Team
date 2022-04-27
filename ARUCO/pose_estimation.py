@@ -3,6 +3,7 @@ Sample Usage:-
 python pose_estimation.py --K_Matrix calibration_matrix.npy --D_Coeff distortion_coefficients.npy --type DICT_5X5_100
 '''
 
+# ^ this is copied into the configurations
 import numpy as np
 import cv2
 import sys
@@ -27,7 +28,8 @@ def pose_estimation(frame, aruco_dict_type, matrix_coefficients, distortion_coef
 
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(gray, cv2.aruco_dict, parameters=parameters,
                                                                 cameraMatrix=matrix_coefficients,
-                                                                distCoeff=distortion_coefficients)
+                                                             distCoeff=distortion_coefficients)
+    # empty list dr. forsyth suggested
     tags = []
     tag = []
 
@@ -45,7 +47,10 @@ def pose_estimation(frame, aruco_dict_type, matrix_coefficients, distortion_coef
             # Draw Axis
             cv2.aruco.drawAxis(frame, matrix_coefficients, distortion_coefficients, rvec, tvec, 0.01)
 
+            # ids can differentiate the markers...
             print(ids)
+            # example of logic, but does not work and crashes. if a certain id is detected, take its tvec value
+            # use these tvec values to find distance between the markers
             #if ids == 69:
              #   print('69 ' + str(tvec))
             #elif ids == 14:

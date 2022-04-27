@@ -7,6 +7,7 @@ mp_pose = mp.solutions.pose
 
 cap = cv2.VideoCapture(0)
 
+# makes the camera display 720p
 def make_720p():
     cap.set(3, 1280)
     cap.set(4, 720)
