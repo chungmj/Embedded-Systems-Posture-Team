@@ -29,25 +29,21 @@ def pose_estimation(frame, aruco_dict_type, matrix_coefficients, distortion_coef
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(gray, cv2.aruco_dict, parameters=parameters,
                                                                 cameraMatrix=matrix_coefficients,
                                                              distCoeff=distortion_coefficients)
-    # empty list dr. forsyth suggested
-    tags = []
-    tag = []
 
     # If markers are detected
     if len(corners) > 0:
         for i in range(0, len(ids)):
             # Estimate pose of each marker and return the values rvec and tvec---(different from those of camera
             # coefficients)
-            rvec1, tvec1, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, matrix_coefficients,
+
+
+            rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, matrix_coefficients,
                                                                            distortion_coefficients)
-            rvec2, tvec2, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i], 0.02, matrix_coefficients,
-                                                                            distortion_coefficients)
+
             # Draw a square around the markers
             cv2.aruco.drawDetectedMarkers(frame, corners)
 
             # Draw Axis
-            cv2.aruco.drawAxis(frame, matrix_coefficients, distortion_coefficients, rvec1, tvec1, 0.01)
-            cv2.aruco.drawAxis(frame, matrix_coefficients, distortion_coefficients, rvec2, tvec2, 0.01)
 
             # ids can differentiate the markers...
             #print(str(ids) + str(tvec1))
@@ -55,10 +51,10 @@ def pose_estimation(frame, aruco_dict_type, matrix_coefficients, distortion_coef
 
             # example of logic, but does not work and crashes. if a certain id is detected, take its tvec value
             # use these tvec values to find distance between the markers
-            if ids == 69:
-                print('69 ' + str(tvec1))
-            if ids == 14:
-                print('14 ' + str(tvec2))
+
+
+
+
     return frame
 
 
