@@ -1,12 +1,17 @@
 import pandas as pd
 import numpy as np
 
+
 df = pd.read_csv('out.csv', names=('x', 'y', 'z'))
 
 y_value = df['y'].to_numpy()
-print(y_value)
-max_y = np.max(y_value)
-min_y = np.min(y_value)
+threshold = 8
 
-print(max_y)
-print(min_y)
+
+count = 0
+for i in range(len(y_value)):
+    if y_value[i] > threshold and y_value[i-1] < threshold:
+        count += 1
+print(count)
+
+
