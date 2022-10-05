@@ -8,10 +8,10 @@ y_value = df['y'].to_numpy()
 threshold = 8
 
 
-count = 0
+reps = 0
 for i in range(len(y_value)):
     if y_value[i] > threshold and y_value[i-1] < threshold:
         count += 1
-print(count)
+print(reps)
 
 
