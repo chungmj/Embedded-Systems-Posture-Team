@@ -28,6 +28,13 @@ def calculate_angle(a, b, c):
 
     return angle
 
+# def calculate_shoulder_dist(a, b):
+#     a = np.array(a)
+#     b np.array(b)
+
+
+
+
 
 # Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
