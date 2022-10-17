@@ -2,6 +2,8 @@ import cv2 as cv
 from cv2 import aruco
 import numpy as np
 import sys
+import mediapipe as mp
+
 
 calib_data_path = "../calib_data/MultiMatrix.npz"
 
@@ -20,7 +22,7 @@ marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
 
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 
 try:
     fp = open('out.csv', 'w')
@@ -80,6 +82,4 @@ cap.release()
 cv.destroyAllWindows()
 fp.close()
 
-# find max
-# rep counter
-# matplotlib, circular buffer
+

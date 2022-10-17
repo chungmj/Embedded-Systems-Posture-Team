@@ -15,4 +15,6 @@ for i in range(len(y_value)):
 print(reps)
 
 plt.plot(x_value, y_value)
+plt.xlim(-50, 70)
+plt.ylim(-50, 70)
 plt.show()
