@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e856abe9-465f-4ed8-9d2b-d1d49a462399" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pyserialv2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bar Path.py" beforeDir="false" afterPath="$PROJECT_DIR$/Bar Path.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/combine.py" beforeDir="false" afterPath="$PROJECT_DIR$/combine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyserial.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserial.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +248,7 @@
       <workItem from="1667927678430" duration="23000" />
       <workItem from="1668020914610" duration="4428000" />
       <workItem from="1668443806203" duration="2244000" />
-      <workItem from="1668451346066" duration="7162000" />
+      <workItem from="1668451346066" duration="7463000" />
     </task>
     <servers />
   </component>
