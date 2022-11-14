@@ -81,14 +81,22 @@ def calculate_angle(a, b, c):
     return angle
 
 
-
+def get_Arduino_data():
+    return None
 
 # Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while True:
-        if serialInst.in_waiting:
-            packet = serialInst.readline()
-            print(packet.decode('ISO-8859-1').rstrip('\n'))
+
+        get_Arduino_data()
+        #if serialInst.in_waiting:
+
+            # send '1' to Arduino
+
+
+            # parse the response
+        #    packet = serialInst.readline()
+        #    print(packet.decode('ISO-8859-1').rstrip('\n'))
             #serial.write('/')
         ret, frame = cap.read()
         ret1, frame1 = cap2.read()
