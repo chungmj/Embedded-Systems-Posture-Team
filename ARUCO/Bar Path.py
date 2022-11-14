@@ -42,6 +42,10 @@ while True:
         rVec, tVec, _ = aruco.estimatePoseSingleMarkers(
             marker_corners, MARKER_SIZE, cam_mat, dist_coef
         )
+
+        # solvePnP is recommended from stack overflow to improve detection
+        # https://stackoverflow.com/questions/73276708/how-to-improve-aruco-marker-pose-estimation
+        #rVec, tVec, _ = aruco.SolvePnP(marker_corners, MARKER_SIZE, cam_mat, dist_coef)
         total_markers = range(0, marker_IDs.size)
 
         A = np.where(marker_IDs == 25)

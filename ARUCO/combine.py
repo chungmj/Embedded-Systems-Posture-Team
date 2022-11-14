@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import mediapipe as mp
 import serial.tools.list_ports
+import serial
 import math
 
 #pyserial
@@ -21,6 +22,8 @@ portVar = '/dev/cu.usbserial-140'
 serialInst.baudrate = 9600
 serialInst.port = portVar
 serialInst.open()
+
+
 
 
 #bar path
@@ -78,13 +81,15 @@ def calculate_angle(a, b, c):
     return angle
 
 
+
+
 # Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while True:
         if serialInst.in_waiting:
             packet = serialInst.readline()
             print(packet.decode('ISO-8859-1').rstrip('\n'))
-           # serial.write('/')
+            #serial.write('/')
         ret, frame = cap.read()
         ret1, frame1 = cap2.read()
 
@@ -135,10 +140,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 )
                 #print(tVec[i])
                 # Draw the pose of the marker
-                point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
+               # point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
 
-        if ret:
-            cv.imshow("frame", frame)
+        # if ret:
+        #     cv.imshow("frame", frame)
 
         # Recolor image to RGB
         image = cv.cvtColor(frame1, cv.COLOR_BGR2RGB)
@@ -175,15 +180,15 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         angle_r = calculate_angle(hip_r, shoulder_r, elbow_r)
 
         # Visualize angle
-        cv.putText(image, str(round(angle_l)),
-                   tuple(np.multiply(shoulder_l, [1280, 720]).astype(int)),
-                   cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
-                   )
-
-        cv.putText(image, str(round(angle_r)),
-                   tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
-                   cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
-                   )
+        # cv.putText(image, str(round(angle_l)),
+        #            tuple(np.multiply(shoulder_l, [1280, 720]).astype(int)),
+        #            cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
+        #            )
+        #
+        # cv.putText(image, str(round(angle_r)),
+        #            tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
+        #            cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
+        #            )
         # Shoulder Distance
         x = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x - \
             landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x
@@ -205,12 +210,12 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         #     pass
 
         # Render detections
-        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                  mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=2),
-                                  mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
-                                  )
-        if ret1:
-            cv.imshow('Mediapipe Feed', image)
+        # mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+        #                           mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=2),
+        #                           mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2)
+        #                           )
+        # if ret1:
+        #     cv.imshow('Mediapipe Feed', image)
 
         if cv.waitKey(10) & 0xFF == ord('q'):
             break

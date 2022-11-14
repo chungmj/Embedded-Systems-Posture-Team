@@ -2,7 +2,7 @@ import serial.tools.list_ports
 import serial
 
 ports = serial.tools.list_ports.comports()
-serialInst = serial.Serial()
+ser = serial.Serial()
 
 portList = []
 
@@ -12,12 +12,12 @@ for onePort in ports:
 
 portVar = '/dev/cu.usbserial-140'
 
-serialInst.baudrate = 9600
-serialInst.port = portVar
-serialInst.open()
+ser.baudrate = 9600
+ser.port = portVar
+ser.open()
 
 
 while True:
-    if serialInst.in_waiting:
-        packet = serialInst.readline()
+    if ser.in_waiting:
+        packet = ser.readline()
         print(packet.decode('ISO-8859-1').rstrip('\n'))
