@@ -4,7 +4,6 @@ import numpy as np
 import sys
 import mediapipe as mp
 
-
 calib_data_path = "../calib_data/MultiMatrix.npz"
 
 calib_data = np.load(calib_data_path)
@@ -22,7 +21,8 @@ marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
 
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(1)
+cap = cv.VideoCapture(0)
+
 
 try:
     fp = open('out.csv', 'w')
@@ -47,8 +47,8 @@ while True:
         A = np.where(marker_IDs == 25)
 
         locA = tVec[A]
-        print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]), file=fp)
-        print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]))
+        # print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]), file=fp)
+        # print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]))
 
         fp.flush()
 
@@ -70,7 +70,7 @@ while True:
             bottom_right = corners[2].ravel()
             bottom_left = corners[3].ravel()
 
-            print(tVec[i])
+            #print(tVec[i])
             # Draw the pose of the marker
             point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
 

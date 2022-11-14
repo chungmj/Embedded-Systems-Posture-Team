@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+import math
 
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -30,7 +31,7 @@ def calculate_angle(a, b, c):
 
 # def calculate_shoulder_dist(a, b):
 #     a = np.array(a)
-#     b np.array(b)
+#     b = np.array(b)
 
 
 
@@ -86,6 +87,16 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                         tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
                         cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv2.LINE_AA
                         )
+
+            x = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x - \
+                landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x
+            y = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y - \
+                landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
+            x_r = x * 40.64 / 0.1
+            y_r = y * 15.24 / 0.1
+            shoulder_distance = math.sqrt(x_r**2 + y_r**2)
+            print(shoulder_distance)
+
         except:
             pass
 

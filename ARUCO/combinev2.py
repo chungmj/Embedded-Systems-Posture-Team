@@ -4,7 +4,6 @@ import numpy as np
 import sys
 import mediapipe as mp
 import serial.tools.list_ports
-import math
 
 #pyserial
 ports = serial.tools.list_ports.comports()
@@ -41,8 +40,8 @@ marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
 
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(1)
-cap2 = cv.VideoCapture(0)
+cap = cv.VideoCapture(0)
+cap2 = cv.VideoCapture(1)
 
 try:
     fp = open('out.csv', 'w')
@@ -101,14 +100,18 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             total_markers = range(0, marker_IDs.size)
 
             A = np.where(marker_IDs == 25)
-            B = np.where(marker_IDs == 69)
-            C = np.where(marker_IDs == 14)
 
-            locB = -tVec[B]
-            locC = -tVec[C]
-            dist = np.linalg.norm(locB - locC)
-            #print('Grip width is: ' + str(dist) + ' cm')
+            locA = tVec[A]
+            print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]), file=fp)
+            print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]))
 
+            # B = np.where(marker_IDs == 69)
+            # C = np.where(marker_IDs == 14)
+            #
+            # locB = -tVec[B]
+            # locC = -tVec[C]
+            # dist = np.linalg.norm(locA - locB)
+            # print(str(dist) + ' cm')
             fp.flush()
 
             corners = marker_corners[0].reshape(4, 2)
@@ -129,11 +132,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 bottom_right = corners[2].ravel()
                 bottom_left = corners[3].ravel()
 
-                # Calculating the distance
-                distance = np.sqrt(
-                    tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
-                )
-                #print(tVec[i])
+                print(tVec[i])
                 # Draw the pose of the marker
                 point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
 
@@ -152,57 +151,50 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
 
         # Extract landmarks
-        landmarks = results.pose_landmarks.landmark
+        try:
+            landmarks = results.pose_landmarks.landmark
 
-        # Get left body coordinates
-        hip_l = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
-                 landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-        shoulder_l = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
-                      landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-        elbow_l = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
-                   landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+            # Get left body coordinates
+            hip_l = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                     landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+            shoulder_l = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                          landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+            elbow_l = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                       landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
 
-        # Get right body coordinates
-        hip_r = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
-                 landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-        shoulder_r = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
-                      landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-        elbow_r = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
-                   landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+            # Get right body coordinates
+            hip_r = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
+                     landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+            shoulder_r = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                          landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
+            elbow_r = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                       landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
 
-        # Calculate angle
-        angle_l = calculate_angle(hip_l, shoulder_l, elbow_l)
-        angle_r = calculate_angle(hip_r, shoulder_r, elbow_r)
+            # Calculate angle
+            angle_l = calculate_angle(hip_l, shoulder_l, elbow_l)
+            angle_r = calculate_angle(hip_r, shoulder_r, elbow_r)
 
-        # Visualize angle
-        cv.putText(image, str(round(angle_l)),
-                   tuple(np.multiply(shoulder_l, [1280, 720]).astype(int)),
-                   cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
-                   )
+            # Visualize angle
+            cv.putText(image, str(round(angle_l)),
+                       tuple(np.multiply(shoulder_l, [1280, 720]).astype(int)),
+                       cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
+                       )
 
-        cv.putText(image, str(round(angle_r)),
-                   tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
-                   cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
-                   )
-        # Shoulder Distance
-        x = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x - \
-            landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x
-        y = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y - \
-            landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
-        x_r = x * 40.64 / 0.1
-        y_r = y * 15.24 / 0.1
-        shoulder_distance = math.sqrt(x_r ** 2 + y_r ** 2)
-        #print('shoulder dist is: ' + str(shoulder_distance))
-        # if distance > shoulder_distance*2:
-        #     print('GRIP WIDTH IS TOO WIDE')
-        # elif distance < shoulder_distance*1.5:
-        #     print('GRIP WIDTH IS TOO NARROW')
-        print('shoulder distance is: ' + str(shoulder_distance) + ' and grip width is: ' + str(distance))
-
-
-
-        # except:
-        #     pass
+            cv.putText(image, str(round(angle_r)),
+                       tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
+                       cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
+                       )
+            # Shoulder Distance
+            x = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x - \
+                landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x
+            y = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y - \
+                landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
+            x_r = x * 40.64 / 0.1
+            y_r = y * 15.24 / 0.1
+            shoulder_distance = math.sqrt(x_r ** 2 + y_r ** 2)
+            print(shoulder_distance)
+        except:
+            pass
 
         # Render detections
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
