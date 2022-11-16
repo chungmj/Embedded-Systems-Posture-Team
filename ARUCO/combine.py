@@ -87,22 +87,24 @@ def get_Arduino_data():
 # Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while True:
+        #multithreading / multiprocessing. mutex
 
-        get_Arduino_data()
+        #get_Arduino_data()
         #if serialInst.in_waiting:
 
             # send '1' to Arduino
 
 
             # parse the response
-        #    packet = serialInst.readline()
-        #    print(packet.decode('ISO-8859-1').rstrip('\n'))
+        packet = serialInst.readline()
+        print(packet.decode('ISO-8859-1').rstrip('\n'))
             #serial.write('/')
         ret, frame = cap.read()
         ret1, frame1 = cap2.read()
 
         if not ret:
             break
+
         gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         marker_corners, marker_IDs, reject = aruco.detectMarkers(
             gray_frame, marker_dict, parameters=param_markers
@@ -116,7 +118,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             A = np.where(marker_IDs == 25)
             B = np.where(marker_IDs == 69)
             C = np.where(marker_IDs == 14)
-
+            # handle aruco tag not found
             locB = -tVec[B]
             locC = -tVec[C]
             dist = np.linalg.norm(locB - locC)
