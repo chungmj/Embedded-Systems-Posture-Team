@@ -173,6 +173,7 @@ def calculate_blazepose():
             cv.imshow('Mediapipe Feed', image)
 
 # do bar bath. ret2
+# while contact sensor is 0, run?
 while True:
     t1 = threading.Thread(target=calculate_grip_width(), args=())
     t1.start()
