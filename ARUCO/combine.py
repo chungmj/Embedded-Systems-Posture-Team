@@ -7,7 +7,6 @@ import serial.tools.list_ports
 import serial
 import math
 
-#pyserial
 ports = serial.tools.list_ports.comports()
 serialInst = serial.Serial()
 
