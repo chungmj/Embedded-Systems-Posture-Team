@@ -31,6 +31,7 @@ param_markers = aruco.DetectorParameters_create()
 
 cap = cv.VideoCapture(0)
 cap2 = cv.VideoCapture(1)
+cap3 = cv.VideoCapture(2)
 
 try:
     fp = open('out.csv', 'w')
@@ -154,6 +155,7 @@ def calculate_blazepose():
                    tuple(np.multiply(shoulder_r, [1280, 720]).astype(int)),
                    cv.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2, cv.LINE_AA
                    )
+
         # Shoulder Distance
         x = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x - \
             landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x
@@ -172,8 +174,76 @@ def calculate_blazepose():
         if ret1:
             cv.imshow('Mediapipe Feed', image)
 
+
+def calculate_barPath():
+    ret, frame = cap3.read()
+
+    gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    marker_corners, marker_IDs, reject = aruco.detectMarkers(
+        gray_frame, marker_dict, parameters=param_markers
+    )
+    if marker_corners:
+        rVec, tVec, _ = aruco.estimatePoseSingleMarkers(
+            marker_corners, MARKER_SIZE_B, cam_mat, dist_coef
+        )
+
+        total_markers = range(0, marker_IDs.size)
+
+        A = np.where(marker_IDs == 25)
+
+        locA = tVec[A]
+
+        fp.flush()
+
+        corners = marker_corners[0].reshape(4, 2)
+        corners = corners.astype(int)
+        top_right = corners[0].ravel()
+        top_left = corners[1].ravel()
+        bottom_right = corners[2].ravel()
+        bottom_left = corners[3].ravel()
+
+        for ids, corners, i in zip(marker_IDs, marker_corners, total_markers):
+            cv.polylines(
+                frame, [corners.astype(np.int32)], True, (0, 255, 255), 4, cv.LINE_AA
+            )
+            corners = corners.reshape(4, 2)
+            corners = corners.astype(int)
+            top_right = corners[0].ravel()
+            top_left = corners[1].ravel()
+            bottom_right = corners[2].ravel()
+            bottom_left = corners[3].ravel()
+
+            # print(tVec[i])
+            # Draw the pose of the marker
+            point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
+            print(locA)
+
 # do bar bath. ret2
 # while contact sensor is 0, run?
+ports = serial.tools.list_ports.comports()
+ser = serial.Serial()
+
+portList = []
+
+for onePort in ports:
+    portList.append(str(onePort))
+    print(str(onePort))
+
+portVar = '/dev/cu.usbserial-140'
+
+ser.baudrate = 9600
+ser.port = portVar
+ser.open()
+
+
+# while True:
+#     if ser.in_waiting:
+#         packet = ser.readline()
+#         # print(packet.decode('ISO-8859-1').rstrip('\n'))
+#         txt = packet.decode('ISO-8859-1').rstrip('\n')
+#         arrayTxt = txt.split(",")
+#         contact = arrayTxt[-1]
+
 while True:
     t1 = threading.Thread(target=calculate_grip_width(), args=())
     t1.start()
@@ -181,5 +251,9 @@ while True:
     t2 = threading.Thread(target=calculate_blazepose(), args=())
     t2.start()
 
+    # t3 = threading.Thread(target=calculate_barPath(), args=())
+    # t3.start()
+
     t1.join()
     t2.join()
+    #t3.join()

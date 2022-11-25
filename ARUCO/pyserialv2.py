@@ -20,4 +20,8 @@ ser.open()
 while True:
     if ser.in_waiting:
         packet = ser.readline()
-        print(packet.decode('ISO-8859-1').rstrip('\n'))
+        # print(packet.decode('ISO-8859-1').rstrip('\n'))
+        txt = packet.decode('ISO-8859-1').rstrip('\n')
+        arrayTxt = txt.split(",")
+        print(arrayTxt[-1])
+
