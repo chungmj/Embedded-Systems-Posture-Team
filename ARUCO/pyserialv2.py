@@ -10,7 +10,7 @@ for onePort in ports:
     portList.append(str(onePort))
     print(str(onePort))
 
-portVar = '/dev/cu.usbserial-140'
+portVar = '/dev/cu.usbserial-1110'
 
 ser.baudrate = 9600
 ser.port = portVar
