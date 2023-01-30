@@ -32,7 +32,7 @@ for onePort in ports:
     portList.append(str(onePort))
     print(str(onePort))
 
-portVar = '/dev/cu.usbserial-140'
+portVar = '/dev/cu.usbserial-1140'
 
 ser.baudrate = 9600
 ser.port = portVar
@@ -144,8 +144,8 @@ def calculate_grip_width(record_request, grip_messages):
                     # print('grip width is: ' + str(dist), file=sys.stderr)
                     msg = (time.time(), dist, frame)  # Message is a tuple of (current time, grip width)
                     grip_messages.put(msg, block=False, timeout=None)
-            else:
-                print('detected no markers', file=sys.stderr)
+            # else:
+            #     print('detected no markers', file=sys.stderr)
 
             # if ret:
             #     cv.imshow("frame", frame)
@@ -178,6 +178,8 @@ def calculate_blazepose(record_request2, pose_messages):
 
                 # Extract landmarks
                 landmarks = results.pose_landmarks.landmark
+                if not landmarks:
+                    continue
 
                 # Get left body coordinates
                 hip_l = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
@@ -281,7 +283,7 @@ def calculate_barPath(record_request3, bar_messages):
                     # Draw the pose of the marker
                     point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
                     msg_bar = (time.time(), locA)  # Message is a tuple of (current time, grip width)
-                    grip_messages.put(msg_bar, block=False, timeout=None)
+                    bar_messages.put(msg_bar, block=False, timeout=None)
 
 
 def calculate_arduino(arduino_messages):
@@ -335,6 +337,15 @@ t2.start()
 # t3 = threading.Thread(target=calculate_barPath, args=(bar_record_request, bar_messages))
 # t3.start()
 
+grip_dist_sum = 0
+grip_msg_received = 0
+shoulder_dist_sum = 0
+shoulder_msg_received = 0
+left_angle_sum = 0
+left_angle_received = 0
+right_angle_sum = 0
+right_angle_received = 0
+
 while True:
     # TODO #1: Make a new thread for the arduino, having the main processing on this thread is
     #          difficult because of the baud rate of the arduino being much lower than the cams
@@ -359,28 +370,47 @@ while True:
 
     # TODO #3: For any sort of user interface, i'd recommend using tkinter which can make
     #  a desktop app appear vs creating some sort of website ui with flask/django (because it'd be harder imo)
+
     try:
         racked = rack_state.get(block=False)
-        print(str(racked) + ' on the main thread')
-        grip_record_request.put(racked)
-        # bar_record_request.put(racked)
-        pose_record_request.put(racked)
+        print('racked = ', str(racked))
+        if racked:
+            print('sending request')
+            grip_record_request.put(racked)
+            # bar_record_request.put(racked)
+            pose_record_request.put(racked)
+        else:
+            if grip_msg_received > 0 and shoulder_msg_received > 0:
+                grip_dist_avg = grip_dist_sum / grip_msg_received
+                shoulder_dist_avg = shoulder_dist_sum / shoulder_msg_received
+                print('avg grip dist:', grip_dist_avg)
+                print('avg shoulder dist:', shoulder_dist_avg)
+            grip_dist_sum = 0
+            grip_msg_received = 0
+            shoulder_dist_sum = 0
+            shoulder_msg_received = 0
 
     except queue.Empty:
         pass
 
     try:
         grip_data = grip_messages.get(block=False)
-        print('grip width: ' + str(grip_data[1]))
+        # cv.imshow("frame", grip_data[2])
+        # print('grip width: ' + str(grip_data[1]))
+        grip_dist_sum += grip_data[1]
+        grip_msg_received += 1
 
     except queue.Empty:
         pass
 
     try:
         pose_data = pose_messages.get(block=False)
-        print('left elbow angle ' + str(pose_data[1]))
-        print('right elbow angle ' + str(pose_data[2]))
-        print('shoulder distance: ' + str(pose_data[3]))
+
+        # print('left elbow angle ' + str(pose_data[1]))
+        # print('right elbow angle ' + str(pose_data[2]))
+        # print('shoulder distance: ' + str(pose_data[3]))
+        shoulder_dist_sum += pose_data[3]
+        shoulder_msg_received += 1
 
     except queue.Empty:
         pass
@@ -395,3 +425,26 @@ t0.join()
 t1.join()
 t2.join()
 # t3.join()
+
+"""
+Write data to file
+Once RERACKED, process data
+once calculated, present results
+
+Tkinter >>> "Start set" > silently collect data > rerack > present results
+
+Results:
+- reps
+- successes / failures / tips?
+- path of bar?
+
+Wants: calculate data, once reracked >>> print success / failures
+bar path
+"""
+
+# pressure sensor > voltage divider
+# ui
+# bar path >> similarity of curves. dynamic time warping. spline matching. sometimes turn each segment a letter and turn curves into sequences
+# spline match if time isn't important
+
+# can do balance / slope of bar using aruco tags

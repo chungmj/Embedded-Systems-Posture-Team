@@ -51,7 +51,7 @@ while True:
         A = np.where(marker_IDs == 25)
 
         locA = tVec[A]
-        # print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]), file=fp)
+        print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]), file=fp)
         # print(str(locA[0, 0]) + ',' + str(locA[0, 1]) + ',' + str(locA[0, 2]))
 
         fp.flush()
