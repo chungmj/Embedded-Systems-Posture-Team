@@ -11,6 +11,7 @@ import queue
 import time
 import random
 import signal
+import matplotlib.pyplot as plt
 
 shutdown = False
 
@@ -342,9 +343,16 @@ grip_msg_received = 0
 shoulder_dist_sum = 0
 shoulder_msg_received = 0
 left_angle_sum = 0
-left_angle_received = 0
+left_angle_received = []
 right_angle_sum = 0
-right_angle_received = 0
+right_angle_received = []
+left_angle_data = []
+left_angle_indicator = []
+right_angle_data = []
+wide = 1
+narrow = -1
+correct = 0
+left_angle_time = 0
 
 while True:
     # TODO #1: Make a new thread for the arduino, having the main processing on this thread is
@@ -385,10 +393,45 @@ while True:
                 shoulder_dist_avg = shoulder_dist_sum / shoulder_msg_received
                 print('avg grip dist:', grip_dist_avg)
                 print('avg shoulder dist:', shoulder_dist_avg)
+
+                # for angle in left_angle_data:
+                #     if angle > 75:
+                #         wide += 1
+                #     elif angle < 45:
+                #         narrow += 1
+                # if wide == 0 and narrow == 0:
+                #     print('You were within range')
+                # else:
+                #     print('You were too narrow', narrow, 'and you were to wide', wide)
+                for angle in left_angle_data:
+                    if 75 < angle < 45:
+                        left_angle_indicator.append(correct)
+                    elif angle > 75:
+                        left_angle_indicator.append(wide)
+                    elif angle < 45:
+                        left_angle_indicator.append(narrow)
+                    else:
+                        left_angle_indicator.append(0)
+
+                print(left_angle_indicator)
+                print(left_angle_received)
+                print('indicator', len(left_angle_indicator))
+                print('received', len(left_angle_received))
+                x = np.array(left_angle_received)
+                y = np.array(left_angle_indicator)
+                plt.plot(x, y)
+                plt.show()
+
+
             grip_dist_sum = 0
             grip_msg_received = 0
             shoulder_dist_sum = 0
             shoulder_msg_received = 0
+            left_angle_sum = 0
+            right_angle_sum = 0
+            # left_angle_received = 0
+            # right_angle_received = 0
+            # left_angle_indicator = 0
 
     except queue.Empty:
         pass
@@ -407,10 +450,16 @@ while True:
         pose_data = pose_messages.get(block=False)
 
         # print('left elbow angle ' + str(pose_data[1]))
+        left_angle_data.append(pose_data[1])
         # print('right elbow angle ' + str(pose_data[2]))
+        right_angle_data.append(pose_data[2])
         # print('shoulder distance: ' + str(pose_data[3]))
         shoulder_dist_sum += pose_data[3]
         shoulder_msg_received += 1
+        left_angle_received.append(left_angle_time)
+        left_angle_time += 1
+
+        # right_angle_received = pose_data[0]
 
     except queue.Empty:
         pass
@@ -448,3 +497,8 @@ bar path
 # spline match if time isn't important
 
 # can do balance / slope of bar using aruco tags
+
+# arduino speed. once clicked and unclicked, process is slow to start
+# loop for graph. thread for elbows collects elbow data as well as a counter or time
+# if statement to figure out if elbow is too narrow or wide or just right
+# sometimes the elbow data is not collected so the counter becomes larger than the data collected
