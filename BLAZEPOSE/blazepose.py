@@ -6,7 +6,7 @@ import math
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 
 # makes the camera display 720p
 def make_720p():

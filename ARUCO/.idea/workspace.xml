@@ -2,8 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e856abe9-465f-4ed8-9d2b-d1d49a462399" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/combinev3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sound_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calc bar.py" beforeDir="false" afterPath="$PROJECT_DIR$/calc bar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calib_data/MultiMatrix.npz" beforeDir="false" afterPath="$PROJECT_DIR$/calib_data/MultiMatrix.npz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/combinev2.py" beforeDir="false" afterPath="$PROJECT_DIR$/combinev2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image0.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image1.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image10.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image11.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image12.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image13.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image14.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image15.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image16.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image17.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image17.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image18.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image18.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image19.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image19.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image2.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image20.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image21.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image21.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image22.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image22.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image23.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image23.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image24.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image24.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image25.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image25.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image26.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image26.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image3.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image4.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image5.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image6.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image7.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image8.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/image9.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/image9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyserialv2.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyserialv2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BLAZEPOSE/blazepose.py" beforeDir="false" afterPath="$PROJECT_DIR$/../BLAZEPOSE/blazepose.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +72,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="PyScientificConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -48,29 +83,7 @@
       <recent name="$PROJECT_DIR$/calib_data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.combinev2">
-    <configuration name="Bar Path" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/usr/local/bin/python3.7" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Bar Path.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.combinev3">
     <configuration name="blazepose" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -85,28 +98,6 @@
       <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../BLAZEPOSE/blazepose.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="calc bar" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="/usr/local/bin/python3.7" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/calc bar.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -137,7 +128,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="fps_check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="combinev3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -150,7 +141,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fps_check.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/combinev3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dist" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/local/bin/python3.7" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dist.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -181,21 +194,43 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="sound_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/local/bin/python3.7" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sound_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.main" />
       <item itemvalue="Python.combinev2" />
       <item itemvalue="Python.blazepose" />
-      <item itemvalue="Python.calc bar" />
-      <item itemvalue="Python.Bar Path" />
-      <item itemvalue="Python.fps_check" />
+      <item itemvalue="Python.dist" />
+      <item itemvalue="Python.sound_test" />
+      <item itemvalue="Python.combinev3" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.combinev3" />
+        <item itemvalue="Python.dist" />
         <item itemvalue="Python.combinev2" />
         <item itemvalue="Python.blazepose" />
-        <item itemvalue="Python.Bar Path" />
-        <item itemvalue="Python.fps_check" />
-        <item itemvalue="Python.calc bar" />
+        <item itemvalue="Python.sound_test" />
       </list>
     </recent_temporary>
   </component>
@@ -273,6 +308,34 @@
       <workItem from="1675104702407" duration="7314000" />
       <workItem from="1675197434739" duration="315000" />
       <workItem from="1675207417756" duration="173000" />
+      <workItem from="1675282167115" duration="3268000" />
+      <workItem from="1675368654225" duration="616000" />
+      <workItem from="1675446456195" duration="1442000" />
+      <workItem from="1675645098535" duration="2245000" />
+      <workItem from="1675715390715" duration="596000" />
+      <workItem from="1675882683227" duration="3240000" />
+      <workItem from="1675885962077" duration="3490000" />
+      <workItem from="1675969287870" duration="163000" />
+      <workItem from="1675976423722" duration="1463000" />
+      <workItem from="1675978764106" duration="529000" />
+      <workItem from="1675995176582" duration="929000" />
+      <workItem from="1676061069895" duration="597000" />
+      <workItem from="1676313995121" duration="6750000" />
+      <workItem from="1676403568788" duration="737000" />
+      <workItem from="1676486082114" duration="4383000" />
+      <workItem from="1676494462628" duration="1053000" />
+      <workItem from="1676575524340" duration="1035000" />
+      <workItem from="1676579453511" duration="232000" />
+      <workItem from="1676596098829" duration="2752000" />
+      <workItem from="1676663629822" duration="258000" />
+      <workItem from="1676664340938" duration="691000" />
+      <workItem from="1676917914011" duration="6129000" />
+      <workItem from="1676924824680" duration="50000" />
+      <workItem from="1677076664137" duration="599000" />
+      <workItem from="1677092205617" duration="4342000" />
+      <workItem from="1677097952027" duration="1003000" />
+      <workItem from="1677099323963" duration="23000" />
+      <workItem from="1677177334356" duration="1547000" />
     </task>
     <servers />
   </component>
@@ -300,35 +363,38 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/combinev2.py</url>
-          <line>317</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/pyserialv2.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ARUCO$Bar_Path.coverage" NAME="Bar Path Coverage Results" MODIFIED="1664992259218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ARUCO$dist.coverage" NAME="dist Coverage Results" MODIFIED="1664820536577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$calib.coverage" NAME="calib Coverage Results" MODIFIED="1665171738549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$Bar_Path.coverage" NAME="Bar Path Coverage Results" MODIFIED="1675108640676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$calib.coverage" NAME="calib Coverage Results" MODIFIED="1675977024621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$sound_test.coverage" NAME="sound_test Coverage Results" MODIFIED="1676923574033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ARUCO$main.coverage" NAME="main Coverage Results" MODIFIED="1663613780060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bar_Path_py$example.coverage" NAME="example Coverage Results" MODIFIED="1668626801870" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/ARUCO$calib.coverage" NAME="calib Coverage Results" MODIFIED="1663613964675" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$combinev3.coverage" NAME="combinev3 Coverage Results" MODIFIED="1677098886956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ARUCO$trial.coverage" NAME="trial Coverage Results" MODIFIED="1663179102819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bar_Path_py$distANDshoulder.coverage" NAME="distANDshoulder Coverage Results" MODIFIED="1668022530976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$combinev2.coverage" NAME="combinev2 Coverage Results" MODIFIED="1675113751233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bar_Path_py$fps_check.coverage" NAME="fps_check Coverage Results" MODIFIED="1675108432043" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$cap_calib.coverage" NAME="cap_calib Coverage Results" MODIFIED="1665171682392" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$ui.coverage" NAME="ui Coverage Results" MODIFIED="1674505989901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$cap_calib.coverage" NAME="cap_calib Coverage Results" MODIFIED="1675976830113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bar_Path_py$combine.coverage" NAME="combine Coverage Results" MODIFIED="1668558456300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$calc_bar.coverage" NAME="calc bar Coverage Results" MODIFIED="1674828928189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$blazepose.coverage" NAME="blazepose Coverage Results" MODIFIED="1675113156999" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../BLAZEPOSE" />
-    <SUITE FILE_PATH="coverage/ARUCO$cap_calib.coverage" NAME="cap_calib Coverage Results" MODIFIED="1663182879167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$dist.coverage" NAME="dist Coverage Results" MODIFIED="1670444338214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$pyserial.coverage" NAME="pyserial Coverage Results" MODIFIED="1668458084357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$calc_bar.coverage" NAME="calc bar Coverage Results" MODIFIED="1676320025039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$dist.coverage" NAME="dist Coverage Results" MODIFIED="1677098752762" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/ARUCO$calc_bar.coverage" NAME="calc bar Coverage Results" MODIFIED="1664992815419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bar_Path_py$read.coverage" NAME="read Coverage Results" MODIFIED="1665425686955" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bar_Path_py$pyserialv2.coverage" NAME="pyserialv2 Coverage Results" MODIFIED="1669600956490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ARUCO$Bar_Path.coverage" NAME="Bar Path Coverage Results" MODIFIED="1664992259218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ARUCO$dist.coverage" NAME="dist Coverage Results" MODIFIED="1664820536577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$Bar_Path.coverage" NAME="Bar Path Coverage Results" MODIFIED="1676319964722" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ARUCO$calib.coverage" NAME="calib Coverage Results" MODIFIED="1663613964675" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$combinev2.coverage" NAME="combinev2 Coverage Results" MODIFIED="1677098078410" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$ui.coverage" NAME="ui Coverage Results" MODIFIED="1674505989901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$blazepose.coverage" NAME="blazepose Coverage Results" MODIFIED="1677097751276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../BLAZEPOSE" />
+    <SUITE FILE_PATH="coverage/ARUCO$cap_calib.coverage" NAME="cap_calib Coverage Results" MODIFIED="1663182879167" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$pyserial.coverage" NAME="pyserial Coverage Results" MODIFIED="1668458084357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$playground.coverage" NAME="combinev3 Coverage Results" MODIFIED="1677097856732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bar_Path_py$pyserialv2.coverage" NAME="pyserialv2 Coverage Results" MODIFIED="1676921893258" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
