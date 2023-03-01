@@ -50,15 +50,16 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
+UNRACKED = 5.0
+
+# Aruco Marker specifications
 MARKER_SIZE = 9.97331  # centimeters
 MARKER_SIZE_B = 5  # centimeters
-
-UNRACKED = 5.0
 marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
-
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(0)
+#
+cap = cv.VideoCapture(1)
 cap2 = cv.VideoCapture(2)
 # cap3 = cv.VideoCapture(0)
 

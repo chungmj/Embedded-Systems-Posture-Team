@@ -17,8 +17,8 @@ from gtts import gTTS
 
 shutdown = False
 
-sound_path = "/Users/michael/PycharmProjects/GitHub/Embedded-Systems-Posture-Team/ARUCO/Pop Smoke - Dior (Official Audio).mp3"
 
+# Clean Shutdown function
 def signal_handler():
     print('You pressed Ctrl+C!')
     shutdown = True
@@ -26,7 +26,7 @@ def signal_handler():
 
 signal.signal(signal.SIGINT, signal_handler)
 
-# Arduino Set up
+# Arduino set up
 ports = serial.tools.list_ports.comports()
 ser = serial.Serial()
 
@@ -36,15 +36,13 @@ for onePort in ports:
     portList.append(str(onePort))
     print(str(onePort))
 
-portVar = '/dev/cu.usbserial-1130'
-
+portVar = '/dev/cu.usbserial-1430'
 ser.baudrate = 9600
 ser.port = portVar
 ser.open()
 
-# bar path
+# Calibration for Aruco cameras
 calib_data_path = "../calib_data/MultiMatrix.npz"
-
 calib_data = np.load(calib_data_path)
 print(calib_data.files)
 
@@ -53,25 +51,29 @@ dist_coef = calib_data["distCoef"]
 r_vectors = calib_data["rVector"]
 t_vectors = calib_data["tVector"]
 
+UNRACKED = 5.0
+
+# Aruco Marker specifications
 MARKER_SIZE = 9.97331  # centimeters
 MARKER_SIZE_B = 5  # centimeters
-
-UNRACKED = 5.0
 marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
-
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(0)
-cap2 = cv.VideoCapture(2)
-# cap3 = cv.VideoCapture(0)
+# Define cameras
+# cap = cv.VideoCapture(1)    # Grip width
+# cap3 = cv.VideoCapture(2)   # Bar Path
+# cap2 = cv.VideoCapture(3)   # Blazepose
 
+
+
+# Writing bar path data csv file
 try:
     fp = open('out.csv', 'w')
 except IOError:
     print('error')
     sys.exit(-1)
 
-# mediapipe / blazepose
+# mediapipe set up
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
@@ -91,8 +93,9 @@ def calculate_angle(a, b, c):
     return angle
 
 
-def calculate_grip_width(record_request, grip_messages):
+def calculate_grip_width(cam1, record_request, grip_messages):
     recording = False
+    cap = cam1
     while not shutdown:
         try:
             request = record_request.get(block=False)
@@ -104,7 +107,6 @@ def calculate_grip_width(record_request, grip_messages):
                 continue
         if recording:
             ret, frame = cap.read()
-            # print(time.time(), file=sys.stderr)
             gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
             marker_corners, marker_IDs, reject = aruco.detectMarkers(
                 gray_frame, marker_dict, parameters=param_markers
@@ -121,7 +123,6 @@ def calculate_grip_width(record_request, grip_messages):
                 locB = -tVec[B]
                 locC = -tVec[C]
                 dist = np.linalg.norm(locB - locC)
-                # print('Grip width is: ' + str(dist) + ' cm')
 
                 fp.flush()
 
@@ -155,8 +156,9 @@ def calculate_grip_width(record_request, grip_messages):
             #     cv.imshow("frame", frame)
 
 
-def calculate_blazepose(record_request2, pose_messages):
+def calculate_blazepose(cam2, record_request2, pose_messages):
     recording = False
+    cap2 = cam2
     while not shutdown:
         try:
             request = record_request2.get(block=False)
@@ -235,20 +237,23 @@ def calculate_blazepose(record_request2, pose_messages):
                 pose_messages.put(msg_p, block=False, timeout=None)
 
 
-def calculate_barPath(record_request3, bar_messages):
+def calculate_barPath(cam3, record_request3, bar_messages):
     recording = False
+    cap3 = cam3
     while not shutdown:
         try:
             request = record_request3.get(block=False)
             print(request)
             recording = request
         except queue.Empty:
+            # print('no request')
             if not recording:
                 continue
         if recording:
-            ret, frame = cap3.read()
-
-            gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            ret3, frame3 = cap3.read()
+            # if not ret3:
+            #     break
+            gray_frame = cv.cvtColor(frame3, cv.COLOR_BGR2GRAY)
             marker_corners, marker_IDs, reject = aruco.detectMarkers(
                 gray_frame, marker_dict, parameters=param_markers
             )
@@ -272,7 +277,7 @@ def calculate_barPath(record_request3, bar_messages):
 
                 for ids, corners, i in zip(marker_IDs, marker_corners, total_markers):
                     cv.polylines(
-                        frame, [corners.astype(np.int32)], True, (0, 255, 255), 4, cv.LINE_AA
+                        frame3, [corners.astype(np.int32)], True, (0, 255, 255), 4, cv.LINE_AA
                     )
                     corners = corners.reshape(4, 2)
                     corners = corners.astype(int)
@@ -281,9 +286,8 @@ def calculate_barPath(record_request3, bar_messages):
                     bottom_right = corners[2].ravel()
                     bottom_left = corners[3].ravel()
 
-                    # print(tVec[i])
                     # Draw the pose of the marker
-                    point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
+                    point = cv.drawFrameAxes(frame3, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
                     msg_bar = (time.time(), locA)  # Message is a tuple of (current time, grip width)
                     bar_messages.put(msg_bar, block=False, timeout=None)
 
@@ -335,19 +339,23 @@ pose_messages = queue.Queue()
 bar_messages = queue.Queue()
 arduino_messages = queue.Queue()
 rack_state = queue.Queue()
+roll_angle_arr = []
+
 
 t0 = threading.Thread(target=calculate_arduino, args=(arduino_messages,))
 t0.start()
 
-t1 = threading.Thread(target=calculate_grip_width, args=(grip_record_request, grip_messages))
+t1 = threading.Thread(target=calculate_grip_width, args=(cv.VideoCapture(1), grip_record_request, grip_messages))
 t1.start()
 
-t2 = threading.Thread(target=calculate_blazepose, args=(pose_record_request, pose_messages))
+t2 = threading.Thread(target=calculate_blazepose, args=(cv.VideoCapture(3), pose_record_request, pose_messages))
 t2.start()
 
-# t3 = threading.Thread(target=calculate_barPath, args=(bar_record_request, bar_messages))
-# t3.start()
+t3 = threading.Thread(target=calculate_barPath, args=(cv.VideoCapture(0), bar_record_request, bar_messages))
+t3.start()
 
+grip_msg_received = 0
+shoulder_msg_received = 0
 grip_dist = 0
 shoulder_dist = 0
 left_angle_sum = 0
@@ -356,7 +364,7 @@ left_angle_received = []
 right_angle_received = []
 left_angle_data = []
 right_angle_data = []
-roll_angle_arr = []
+bar_arr = []
 
 while True:
 
@@ -366,10 +374,10 @@ while True:
         if racked:
             # print('sending request')
             grip_record_request.put(racked)
-            # bar_record_request.put(racked)
             pose_record_request.put(racked)
+            bar_record_request.put(racked)
 
-# tried while in the else statement and it works but keeps going after it is unracked
+            # tried while in the else statement and it works but keeps going after it is unracked
             # maybe change the inside if statements to while
             if grip_dist > 0 and shoulder_dist > 0:
                 if grip_dist > 1.5 * shoulder_dist:
@@ -421,6 +429,7 @@ while True:
                 print(f'Average tilt angle is: {roll_avg:.2f}')
                 print(f'Left standard deviation: {left_std:.2f}')
                 print(f'Right standard deviation: {right_std:.2f}')
+                print(bar_arr)
 
             grip_dist_sum = 0
             grip_msg_received = 0
@@ -431,7 +440,8 @@ while True:
             left_avg = 0
             right_avg = 0
             roll_count = 0
-            # while grip_dist > 0 and shoulder_dist > 0:
+            # made a change below to while...
+            # while racked:
             #     if grip_dist > 1.5 * shoulder_dist:
             #         # dist_error = grip_dist - (1.5 * shoulder_dist)
             #         wide = 'Grip width too wide'
@@ -462,6 +472,7 @@ while True:
         grip_data = grip_messages.get(block=False)
         # cv.imshow("frame", grip_data[2])
         grip_dist = grip_data[1]
+        grip_msg_received += 1
 
     except queue.Empty:
         pass
@@ -471,18 +482,24 @@ while True:
         left_angle_data.append(pose_data[1])
         right_angle_data.append(pose_data[2])
         shoulder_dist = pose_data[3]
+        shoulder_msg_received += 1
 
     except queue.Empty:
         pass
 
-    # try:
-    #     bar_data = bar_messages.get(block=False)
-    #     print(bar_data[1])
-    #
-    # except queue.Empty:
-    #     pass
+    try:
+        bar_data = bar_messages.get(block=False)
+        # print(bar_data[1])
+        bar_arr.append(bar_data[1])
+
+
+    except queue.Empty:
+        pass
 
 t0.join()
 t1.join()
 t2.join()
-# t3.join()
+t3.join()
+
+# constant grip width check while unracked is false
+# bar path error

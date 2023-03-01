@@ -6,7 +6,8 @@ import math
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(1)
+
 
 # makes the camera display 720p
 def make_720p():
@@ -14,6 +15,7 @@ def make_720p():
     cap.set(4, 720)
 
 make_720p()
+
 
 # Calculate angle between elbow and body using hip, shoulder, and elbow points
 def calculate_angle(a, b, c):
