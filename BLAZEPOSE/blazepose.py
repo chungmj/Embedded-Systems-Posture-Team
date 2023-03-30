@@ -6,7 +6,7 @@ import math
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(2)
 
 
 # makes the camera display 720p
@@ -96,9 +96,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y
             x_r = x * 40.64 / 0.1
             y_r = y * 15.24 / 0.1
+            sd = []
             shoulder_distance = math.sqrt(x_r**2 + y_r**2)
-            print(shoulder_distance)
-
+            sd.append(shoulder_distance)
+            
         except:
             pass
 

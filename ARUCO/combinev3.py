@@ -14,6 +14,17 @@ import signal
 import matplotlib.pyplot as plt
 from playsound import playsound
 from gtts import gTTS
+import select
+
+
+def heardEnter():
+    i,o,e = select.select([sys.stdin],[],[],0.0001)
+    for s in i:
+        if s == sys.stdin:
+            input = sys.stdin.readline()
+            return True
+    return False
+
 
 shutdown = False
 
@@ -36,10 +47,11 @@ for onePort in ports:
     portList.append(str(onePort))
     print(str(onePort))
 
-portVar = '/dev/cu.usbserial-1430'
+portVar = '/dev/cu.usbserial-110'
 ser.baudrate = 9600
 ser.port = portVar
 ser.open()
+
 
 # Calibration for Aruco cameras
 calib_data_path = "../calib_data/MultiMatrix.npz"
@@ -63,7 +75,6 @@ param_markers = aruco.DetectorParameters_create()
 # cap = cv.VideoCapture(1)    # Grip width
 # cap3 = cv.VideoCapture(2)   # Bar Path
 # cap2 = cv.VideoCapture(3)   # Blazepose
-
 
 
 # Writing bar path data csv file
@@ -93,20 +104,27 @@ def calculate_angle(a, b, c):
     return angle
 
 
-def calculate_grip_width(cam1, record_request, grip_messages):
+def calculate_grip_width(cam1, record_request, grip_messages, image_messages):
+
     recording = False
     cap = cam1
+    print("calculate_grip_width", cap.getBackendName(), file=sys.stderr)
     while not shutdown:
+
+        ret, frame = cap.read()
+        if ret:
+            image_messages.put((time.time(), "grip", frame), block=False)
+
         try:
             request = record_request.get(block=False)
-            print(request)
+            # print(request)
             recording = request
         except queue.Empty:
             # print('no request')
             if not recording:
                 continue
         if recording:
-            ret, frame = cap.read()
+
             gray_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
             marker_corners, marker_IDs, reject = aruco.detectMarkers(
                 gray_frame, marker_dict, parameters=param_markers
@@ -123,6 +141,17 @@ def calculate_grip_width(cam1, record_request, grip_messages):
                 locB = -tVec[B]
                 locC = -tVec[C]
                 dist = np.linalg.norm(locB - locC)
+                if locB.shape[0] == 0 or locC.shape[0] == 0:
+                    continue
+                dist = np.linalg.norm(locB - locC)
+
+                vB = np.squeeze(np.asarray(locB))
+                vC = np.squeeze(np.asarray(locC))
+
+                vector = vC - vB
+                angle_rad = np.arctan2(vector[1], np.linalg.norm(vector[[0, 2]]))
+                angle_deg = np.degrees(angle_rad)
+                # print(angle_deg)
 
                 fp.flush()
 
@@ -147,7 +176,7 @@ def calculate_grip_width(cam1, record_request, grip_messages):
                     # Draw the pose of the marker
                     point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
                     # print('grip width is: ' + str(dist), file=sys.stderr)
-                    msg = (time.time(), dist, frame)  # Message is a tuple of (current time, grip width)
+                    msg = (time.time(), dist, frame, angle_deg)  # Message is a tuple of (current time, grip width)
                     grip_messages.put(msg, block=False, timeout=None)
             # else:
             #     print('detected no markers', file=sys.stderr)
@@ -156,21 +185,35 @@ def calculate_grip_width(cam1, record_request, grip_messages):
             #     cv.imshow("frame", frame)
 
 
-def calculate_blazepose(cam2, record_request2, pose_messages):
+def calculate_blazepose(cam2, record_request2, pose_messages, image_messages):
     recording = False
     cap2 = cam2
+    print("blazepose", cap2.getBackendName(), file=sys.stderr)
+
+    # width = int(cap2.get(cv.CAP_PROP_FRAME_WIDTH))
+    # height = int(cap2.get(cv.CAP_PROP_FRAME_HEIGHT))
+    # writer = cv.VideoWriter('basicvideo3.mp4', cv.VideoWriter_fourcc(*'mp4v'), 20, (width, height))
+
     while not shutdown:
+        # Grab an image from the camera and send it off before anything else
+        ret1, frame1 = cap2.read()
+        if ret1:
+            image_messages.put((time.time(), "blazepose", frame1), block=False)
+
         try:
             request = record_request2.get(block=False)
-            print(request)
+            # print(request)
             recording = request
         except queue.Empty:
             # print('no request')
             if not recording:
                 continue
+
         if recording:
             with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-                ret1, frame1 = cap2.read()
+
+                # writer.write(frame1)
+
                 # Recolor image to RGB
                 image = cv.cvtColor(frame1, cv.COLOR_BGR2RGB)
                 image.flags.writeable = False
@@ -183,9 +226,9 @@ def calculate_blazepose(cam2, record_request2, pose_messages):
                 image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
 
                 # Extract landmarks
-                landmarks = results.pose_landmarks.landmark
-                if not landmarks:
+                if not (results and results.pose_landmarks and results.pose_landmarks.landmark):
                     continue
+                landmarks = results.pose_landmarks.landmark
 
                 # Get left body coordinates
                 hip_l = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
@@ -235,6 +278,10 @@ def calculate_blazepose(cam2, record_request2, pose_messages):
                                           )
                 msg_p = (time.time(), angle_l, angle_r, shoulder_distance)
                 pose_messages.put(msg_p, block=False, timeout=None)
+
+        # cv.VideoCapture(2).release()
+        # writer.release()
+        # cv.destroyAllWindows()
 
 
 def calculate_barPath(cam3, record_request3, bar_messages):
@@ -294,6 +341,7 @@ def calculate_barPath(cam3, record_request3, bar_messages):
 
 def calculate_arduino(arduino_messages):
     last_contact = UNRACKED
+    first_time = True
 
     while not shutdown:
         if ser.in_waiting:
@@ -302,14 +350,15 @@ def calculate_arduino(arduino_messages):
                 packet = ser.readline()
                 txt = packet.decode('ISO-8859-1').rstrip('\n').rstrip('\r')
                 arrayTxt = txt.split(",")
-                roll_rad = math.atan2(float(arrayTxt[1]), float(arrayTxt[2]))
-                roll_angle = math.degrees(roll_rad)
-                roll_angle_arr.append(roll_angle)
+                pressure = txt[0]
 
-                contact = float(arrayTxt[3])
+                contact = float(pressure)
                 contact = int(contact)
-                contact == UNRACKED
-                if last_contact != UNRACKED and contact == UNRACKED:
+                if first_time:
+                    first_time = False
+                    rack_state.put(contact)
+
+                elif last_contact != UNRACKED and contact == UNRACKED:
                     print('Bar Racked')
                     rack_state.put(False)
 
@@ -317,42 +366,51 @@ def calculate_arduino(arduino_messages):
                     print('Bar Unracked')
                     rack_state.put(True)
 
-                # elif last_contact != UNRACKED and contact != UNRACKED:
-                #     rack_state.put(False)
-                # if last_contact > 2 and contact > 2:
-                #     print('Bar Racked')
-                #     rack_state.put(False)
-                # elif last_contact < 2 and contact > 2:
-                #     print('Bar Unracked')
-                #     rack_state.put(True)
                 last_contact = contact
 
             except IndexError:
                 print('ignoring error')
 
 
+def audio_player(audio_messages):
+
+    while not shutdown:
+        try:
+            msg = audio_messages.get(block=False)
+            filename = msg[0]
+            current_time = msg[1]
+            if time.time() - current_time < 0.001:
+                playsound(filename)
+
+        except queue.Empty:
+            pass
+
+
+audio_request = queue.Queue()
 grip_record_request = queue.Queue()
 pose_record_request = queue.Queue()
 bar_record_request = queue.Queue()
 grip_messages = queue.Queue()
 pose_messages = queue.Queue()
 bar_messages = queue.Queue()
+image_messages = queue.Queue()
 arduino_messages = queue.Queue()
 rack_state = queue.Queue()
-roll_angle_arr = []
-
 
 t0 = threading.Thread(target=calculate_arduino, args=(arduino_messages,))
 t0.start()
 
-t1 = threading.Thread(target=calculate_grip_width, args=(cv.VideoCapture(1), grip_record_request, grip_messages))
+t1 = threading.Thread(target=calculate_grip_width, args=(cv.VideoCapture(1), grip_record_request, grip_messages, image_messages))
 t1.start()
 
-t2 = threading.Thread(target=calculate_blazepose, args=(cv.VideoCapture(3), pose_record_request, pose_messages))
+t2 = threading.Thread(target=calculate_blazepose, args=(cv.VideoCapture(2), pose_record_request, pose_messages, image_messages))
 t2.start()
 
-t3 = threading.Thread(target=calculate_barPath, args=(cv.VideoCapture(0), bar_record_request, bar_messages))
-t3.start()
+# t3 = threading.Thread(target=calculate_barPath, args=(bar_messages,))
+# t3.start()
+
+t4 = threading.Thread(target=audio_player, args=(audio_request,))
+t4.start()
 
 grip_msg_received = 0
 shoulder_msg_received = 0
@@ -366,113 +424,51 @@ left_angle_data = []
 right_angle_data = []
 bar_arr = []
 
-while True:
+wide = 'Grip width too wide'
+tts = gTTS(text=wide, lang='en')
+tts.save("wide.mp3")
+
+narrow = 'Grip width too narrow'
+tts = gTTS(text=narrow, lang='en')
+tts.save("narrow.mp3")
+
+okay = 'Grip width is within range. Please proceed.'
+tts = gTTS(text=okay, lang='en')
+tts.save("okay.mp3")
+
+
+grip_record_request.put(True)
+pose_record_request.put(True)
+
+grip_dist_sum = 0
+grip_msg_received = 0
+shoulder_dist_sum = 0
+shoulder_msg_received = 0
+left_angle_sum = 0
+right_angle_sum = 0
+left_avg = 0
+right_avg = 0
+racked = True
+
+width = 1920
+height = 1080
+video_writer = cv.VideoWriter('test.mp4', cv.VideoWriter_fourcc(*'mp4v'), 10, (width, height))
+images = {}
+
+while not shutdown:
 
     try:
         racked = rack_state.get(block=False)
-        # print('racked = ', str(racked))
-        if racked:
-            # print('sending request')
-            grip_record_request.put(racked)
-            pose_record_request.put(racked)
-            bar_record_request.put(racked)
-
-            # tried while in the else statement and it works but keeps going after it is unracked
-            # maybe change the inside if statements to while
-            if grip_dist > 0 and shoulder_dist > 0:
-                if grip_dist > 1.5 * shoulder_dist:
-                    wide = 'Grip width too wide'
-                    tts = gTTS(text=wide, lang='en')
-                    tts.save("wide.mp3")
-                    playsound("wide.mp3")
-
-                elif grip_dist < shoulder_dist:
-                    narrow = 'Grip width too narrow'
-                    tts = gTTS(text=narrow, lang='en')
-                    tts.save("narrow.mp3")
-                    # Play the speech using the playsound module
-                    playsound("narrow.mp3")
-
-                else:
-                    okay = 'Grip width is within range. Please proceed.'
-                    tts = gTTS(text=okay, lang='en')
-                    tts.save("speech.mp3")
-                    playsound("speech.mp3")
-
-        else:
-            if grip_msg_received > 0 and shoulder_msg_received > 0:
-
-                left_angle_sum = sum(left_angle_data)
-                left_avg = left_angle_sum / len(left_angle_data)
-                right_angle_sum = sum(right_angle_data)
-                right_avg = right_angle_sum / len(right_angle_data)
-                left_std = np.std(left_angle_data)
-                right_std = np.std(right_angle_data)
-
-                if left_avg > 75:
-                    print(f'Too wide. Your average left elbow angle is: {left_avg:.2f}')
-                elif left_avg < 45:
-                    print(f'Too narrow. Your average left elbow angle is: {left_avg:.2f}')
-                else:
-                    print(f'Your elbow angle is within the ideal range. Your average left elbow angle is:'
-                          f' {left_avg:.2f}')
-
-                if right_avg > 75:
-                    print(f'Too wide. Your average right elbow angle is: {right_avg:.2f}')
-                elif right_avg < 45:
-                    print(f'Too narrow. Your average right elbow angle is: {right_avg:.2f}')
-                else:
-                    print(f'Your elbow angle is within the ideal range. Your average right elbow angle is:'
-                          f' {right_avg:.2f}')
-
-                roll_avg = sum(roll_angle_arr) / len(roll_angle_arr)
-                print(f'Average tilt angle is: {roll_avg:.2f}')
-                print(f'Left standard deviation: {left_std:.2f}')
-                print(f'Right standard deviation: {right_std:.2f}')
-                print(bar_arr)
-
-            grip_dist_sum = 0
-            grip_msg_received = 0
-            shoulder_dist_sum = 0
-            shoulder_msg_received = 0
-            left_angle_sum = 0
-            right_angle_sum = 0
-            left_avg = 0
-            right_avg = 0
-            roll_count = 0
-            # made a change below to while...
-            # while racked:
-            #     if grip_dist > 1.5 * shoulder_dist:
-            #         # dist_error = grip_dist - (1.5 * shoulder_dist)
-            #         wide = 'Grip width too wide'
-            #         tts = gTTS(text=wide, lang='en')
-            #         tts.save("wide.mp3")
-            #         playsound("wide.mp3")
-            #
-            #     elif grip_dist < shoulder_dist:
-            #         # dist_error = shoulder_dist - grip_dist
-            #         # print('Grip width is', dist_error, 'cm too narrow!')
-            #         narrow = 'Grip width too narrow'
-            #         tts = gTTS(text=narrow, lang='en')
-            #         tts.save("narrow.mp3")
-            #
-            #         # Play the speech using the playsound module
-            #         playsound("narrow.mp3")
-            #
-            #     else:
-            #         okay = 'Grip width is within range. Please proceed.'
-            #         tts = gTTS(text=okay, lang='en')
-            #         tts.save("speech.mp3")
-            #         playsound("speech.mp3")
+        print('racked = ', str(racked))
 
     except queue.Empty:
         pass
 
     try:
         grip_data = grip_messages.get(block=False)
-        # cv.imshow("frame", grip_data[2])
         grip_dist = grip_data[1]
         grip_msg_received += 1
+        bar_angle = grip_data[3]
 
     except queue.Empty:
         pass
@@ -488,18 +484,110 @@ while True:
         pass
 
     try:
-        bar_data = bar_messages.get(block=False)
-        # print(bar_data[1])
-        bar_arr.append(bar_data[1])
+        while not image_messages.empty():
+            img_data = image_messages.get(block=False)
 
+            if not img_data[1] in images.keys():
+                images[img_data[1]] = [img_data[2]]
+            else:
+                images[img_data[1]].append(img_data[2])
 
     except queue.Empty:
         pass
 
+    num_frames = [len(value) for value in images.values()]
+    min_frames = min(num_frames)
+    if min_frames > 0:
+        for i in range(min_frames):
+            frames = [value.pop(0) for key, value in images.items()]
+            image = frames[0]
+            for j in range(1, len(frames)):
+                image = np.concatenate((image, frames[j]), axis=0)
+            video_writer.write(image)
+
+
+    # video_writer.flush()
+
+
+    # try:
+    #     bar_data = bar_messages.get(block=False)
+    #     # print(bar_data[1])
+    #     bar_arr.append(bar_data[1])
+
+    # except queue.Empty:
+    #     pass
+
+    if racked:
+        # may not think its racked
+        # print('sending request')
+        # grip_record_request.put(racked)
+        # bar_record_request.put(racked)
+
+        # tried while in the else statement and it works but keeps going after it is unracked
+        # maybe change the inside if statements to while
+        if grip_dist > 0 and shoulder_dist > 0:
+            if grip_dist > shoulder_dist * 1.9:
+                audio_request.put(("wide.mp3", time.time()))
+
+            elif grip_dist < shoulder_dist * 1.1:
+                audio_request.put(("narrow.mp3", time.time()))
+
+            else:
+                audio_request.put(("okay.mp3", time.time()))
+
+            if abs(bar_angle) > 10:
+                print('stop')
+
+    else:
+        if grip_msg_received > 0 and shoulder_msg_received > 0:
+
+            left_angle_sum = sum(left_angle_data)
+            left_avg = left_angle_sum / len(left_angle_data)
+            right_angle_sum = sum(right_angle_data)
+            right_avg = right_angle_sum / len(right_angle_data)
+            left_std = np.std(left_angle_data)
+            right_std = np.std(right_angle_data)
+
+            if left_avg > 75:
+                print(f'Too wide. Your average left elbow angle is: {left_avg:.2f}')
+            elif left_avg < 45:
+                print(f'Too narrow. Your average left elbow angle is: {left_avg:.2f}')
+            else:
+                print(f'Your elbow angle is within the ideal range. Your average left elbow angle is:'
+                      f' {left_avg:.2f}')
+
+            if right_avg > 75:
+                print(f'Too wide. Your average right elbow angle is: {right_avg:.2f}')
+            elif right_avg < 45:
+                print(f'Too narrow. Your average right elbow angle is: {right_avg:.2f}')
+            else:
+                print(f'Your elbow angle is within the ideal range. Your average right elbow angle is:'
+                      f' {right_avg:.2f}')
+
+            # print(f'Left standard deviation: {left_std:.2f}')
+            # print(f'Right standard deviation: {right_std:.2f}')
+
+        grip_dist_sum = 0
+        grip_msg_received = 0
+        shoulder_dist_sum = 0
+        shoulder_msg_received = 0
+        left_angle_sum = 0
+        right_angle_sum = 0
+        left_avg = 0
+        right_avg = 0
+
+    if heardEnter():
+        shutdown = True
+
+
+
+print('released video')
+video_writer.release()
+print('released video')
+
+
 t0.join()
 t1.join()
 t2.join()
-t3.join()
-
-# constant grip width check while unracked is false
-# bar path error
+# t3.join()
+t4.join()

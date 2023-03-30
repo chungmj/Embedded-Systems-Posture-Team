@@ -1,6 +1,7 @@
 import cv2 as cv
 from cv2 import aruco
 import numpy as np
+import math
 
 calib_data_path = "../calib_data/MultiMatrix.npz"
 
@@ -18,8 +19,7 @@ marker_dict = aruco.Dictionary_get(aruco.DICT_5X5_100)
 
 param_markers = aruco.DetectorParameters_create()
 
-cap = cv.VideoCapture(3)
-
+cap = cv.VideoCapture(2)
 
 while True:
     ret, frame = cap.read()
@@ -38,11 +38,19 @@ while True:
 
         A = np.where(marker_IDs == 69)
         B = np.where(marker_IDs == 14)
-
         locA = -tVec[A]
         locB = -tVec[B]
+        if locA.shape[0] == 0 or locB.shape[0] == 0:
+            continue
         dist = np.linalg.norm(locA - locB)
-        print(str(dist) + ' cm')
+
+        vA = np.squeeze(np.asarray(locA))
+        vB = np.squeeze(np.asarray(locB))
+
+        vector = vB - vA
+        angle_rad = np.arctan2(vector[1], np.linalg.norm(vector[[0, 2]]))
+        angle_deg = np.degrees(angle_rad)
+        print(angle_deg)
 
         corners = marker_corners[0].reshape(4, 2)
         corners = corners.astype(int)
@@ -51,15 +59,15 @@ while True:
         bottom_right = corners[2].ravel()
         bottom_left = corners[3].ravel()
         frame = cv.putText(
-                frame,
-                f"Delta{round(dist, 2)}",
-                top_right,
-                cv.FONT_HERSHEY_PLAIN,
-                1.3,
-                (255, 0, 255),
-                2,
-                cv.LINE_AA,
-            )
+            frame,
+            f"Delta{round(dist, 2)}",
+            top_right,
+            cv.FONT_HERSHEY_PLAIN,
+            1.3,
+            (255, 0, 255),
+            2,
+            cv.LINE_AA,
+        )
 
         for ids, corners, i in zip(marker_IDs, marker_corners, total_markers):
             cv.polylines(
@@ -76,10 +84,9 @@ while True:
             distance = np.sqrt(
                 tVec[i][0][2] ** 2 + tVec[i][0][0] ** 2 + tVec[i][0][1] ** 2
             )
-            print(tVec[i])
             # Draw the pose of the marker
             point = cv.drawFrameAxes(frame, cam_mat, dist_coef, rVec[i], tVec[i], 4, 4)
-            #image = cv.circle(image, (x, y), radius=0, color=(0, 0, 255), thickness=-1)
+            # image = cv.circle(image, (x, y), radius=0, color=(0, 0, 255), thickness=-1)
 
     cv.imshow("frame", frame)
     key = cv.waitKey(1)
